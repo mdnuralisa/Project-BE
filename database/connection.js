@@ -1,24 +1,44 @@
 import pkg from "pg";
+import users from "../model/user.model.js";
 const { Pool } = pkg;
 
-// const config = {
-//     host:
-//     port:
-//     database:
-//     user:
-//     password:
-// };
+const config = {
+    host: "db.xprbfavduijgplvaqujm.supabase.co",
+    port: 5432,
+    database: "postgres",
+    user: "postgres",
+    password: "gEdNXXpVODbegw04",
+};
 
 // const connectionString =
+const pool = new Pool(config);
 
-export const pool = new Pool({connectionString});
+// export const dbInit = async () => {
+//     try {
+//         const result = await pool.query("SELECT NOW()");
+//         console.log("Database connected", result.rows[0].now)
+//     } catch (error) {
+//         console.log(error);
+//         process.exit(1);
+//     }
+// };
 
-export const dbInit = async () => {
+export const db = async () => {
     try {
-        const result = await pool.query("SELECT NOW()");
-        console.log("Database connected", result.rows[0].now);
+      const result = await pool.query("SELECT NOW()");
+      console.log("Database connected", result.rows[0].now);
+      await users ()
     } catch (error) {
-        console.error();
-        process.exit(1);
+      console.log(error);
+      process.exit(1);
     }
-};
+  };
+
+  
+export const query = async (text, params) => {
+    const start = Date.now();
+    const res = await pool.query(text, params);
+    const duration = Date.now() - start;
+    console.log("executed query", { text, duration, rows: res.rowCount });
+    return res;
+  };

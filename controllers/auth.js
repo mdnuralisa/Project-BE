@@ -1,0 +1,60 @@
+import { query } from "../database/connection.js";
+
+const register = async ( req, res) =>{
+    try {
+        const reqBody = req.body;
+
+            const resDB = await query("INSERT INTO users (email, username, password) VALUES ($1, $2, $3)", [reqBody.email, reqBody.username, reqBody.password]);
+        console.log(resDB);
+        res.status(200).json({message: "New user created", data: reqBody});
+    } catch (error) {
+         //   send res status 500 - server error
+    res.status(500).json({ message: "Server error", error: error });
+    }
+};
+
+const login = async (req, res) =>{
+    try {
+        const reqBody = req.body;
+        const resDB = await query ("SELECT * FROM users WHERE email = $1", [
+            reqBody.email,]);
+
+        // No user return
+        if (resDB.rowCount === 0){
+            res.status(401).json({message: "Unauthorised"});
+            return
+        }
+            const userData = resDB.rows[0];
+
+            // compare password from bosy with database
+        if (reqBody.password === userData.password){
+            res.status(200).json({message: "User log in", data: userData});
+            return
+        } else {
+            res.status(401).json({message: "Unauthorised"});
+            return
+        }
+       
+    } catch (error) {
+        //   send res status 500 - server error
+    res.status(500).json({ message: "Server error", error: error });
+    }
+}
+
+const publicController = (req,res)=>{
+    res.status(200).json({ message: "Public route"});
+}
+
+const protectedController = (req,res)=>{
+    const loggedIn = true;
+    if (loggedIn) {
+        res.status(200).json({ message: "Protected route"});
+    } else {
+        res.status(401).json({message: "Unauthorised"});
+    }
+    
+}
+
+const authController = { register, login, publicController, protectedController };
+
+export default authController;

@@ -30,6 +30,10 @@ const login = async (req, res) =>{
         }
             const userData = resDB.rows[0];
 
+        // compare hash
+        const isMatch = await bcrypt.compare(reqBody.password, userData.password);
+        console.log(isMatch);
+
             // compare password from bosy with database
         if (reqBody.password === userData.password){
             res.status(200).json({message: "User log in", data: userData});

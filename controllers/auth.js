@@ -1,5 +1,6 @@
 import { query } from "../database/connection.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 const register = async ( req, res) =>{
     try {
@@ -33,10 +34,12 @@ const login = async (req, res) =>{
         // compare hash
         const isMatch = await bcrypt.compare(reqBody.password, userData.password);
         
+        // create access token
+        const token = jwt.sign({id: userData.id}, "secret-key-here");
 
             // compare password from bosy with database
         if (isMatch){
-            res.status(200).json({message: "User log in", data: userData});
+            res.status(200).json({message: "User log in", data: userData, token: token });
             return
         } else {
             res.status(401).json({message: "Unauthorised"});
@@ -54,13 +57,7 @@ const publicController = (req,res)=>{
 }
 
 const protectedController = (req,res)=>{
-    const loggedIn = true;
-    if (loggedIn) {
-        res.status(200).json({ message: "Protected route"});
-    } else {
-        res.status(401).json({message: "Unauthorised"});
-    }
-    
+    res.status(200).json({ message: "Protected route", data: { user: req.user}});
 }
 
 const authController = { register, login, publicController, protectedController };

@@ -46,7 +46,7 @@ const login = async (req, res) =>{
 
             // compare password from body with database
         if (isMatch){
-            res.status(200).json({message: "User log in", data: userData, token: token });
+            res.status(200).json({message: "User log in", data: {token: token} });
             return
         } else {
             res.status(401).json({message: "Unauthorised"});

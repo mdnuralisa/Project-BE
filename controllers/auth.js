@@ -33,7 +33,7 @@ const login = async (req, res) =>{
 
         // No user return
         if (resDB.rowCount === 0){
-            res.status(401).json({message: "Credential Invalid"});
+            res.status(401).json({message: "Email Invalid"});
             return
         }
             const userData = resDB.rows[0];
@@ -49,7 +49,7 @@ const login = async (req, res) =>{
             res.status(200).json({message: "User log in", data: {token: token} });
             return
         } else {
-            res.status(401).json({message: "Unauthorised"});
+            res.status(401).json({message: "Credential Invalid"});
             return
         }
        

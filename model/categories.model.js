@@ -1,18 +1,14 @@
 import { DataTypes } from "sequelize";
 import { postgresConnection } from "../database/connection.js";
 
-const user = postgresConnection.define(
-  "user",
+const categories = postgresConnection.define(
+  "categories",
   {
     // Model attributes are defined here
-    email: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
     },
   },
   {
@@ -21,4 +17,4 @@ const user = postgresConnection.define(
   }
 );
 
-export default user;
+export default categories;

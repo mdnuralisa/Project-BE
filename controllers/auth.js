@@ -1,23 +1,20 @@
-import { query } from "../database/connection.js";
+import user from "../model/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 const register = async (req, res) => {
+    const { email, password } = req.body;
     try {
-      const reqBody = req.body;
-  
-      
       const salt = bcrypt.genSaltSync(10);
-      const hashedValue = bcrypt.hashSync(reqBody.password, salt);
-
+      const hashedValue = bcrypt.hashSync(password, salt);
   
-      await query(
-        "INSERT INTO users (email, password) VALUES ($1, $2)",
-        [reqBody.email, hashedValue]
-      );
+      const newUser = await user.create({
+        email: email,
+        password: hashedValue,
+      });
       res.status(200).json({
         message: "New user created",
-        data: { email: reqBody.email },
+        data: { email: newUser.email },
       });
     } catch (error) {
       //   send res status 500 - server error
@@ -26,23 +23,27 @@ const register = async (req, res) => {
   };
 
 const login = async (req, res) =>{
+    const { email, password } = req.body;
     try {
-        const reqBody = req.body;
-        const resDB = await query ("SELECT * FROM users WHERE email = $1", [
-            reqBody.email,]);
+// query user based on email
+        const User = await user.findOne({
+          where: {
+            email: email,
+          },
+        });
 
         // No user return
-        if (resDB.rowCount === 0){
-            res.status(401).json({message: "Email Invalid"});
-            return
+    //   if user not found return 404
+        if (!user) {
+            res.status(404).json({ message: "user not found" });
+            return;
         }
-            const userData = resDB.rows[0];
 
         // compare hash
-        const isMatch = await bcrypt.compare(reqBody.password, userData.password);
+        const isMatch = await bcrypt.compare(password, User.password);
         
         // create access token
-        const token = jwt.sign({id: userData.id}, "secret-key-here");
+        const token = jwt.sign({id: User.id}, "secret-key-here");
 
             // compare password from body with database
         if (isMatch){

@@ -92,37 +92,45 @@ const update = async (req, res) => {
 }
 
 const show = async (req, res) => {
-    const { name } = req.body;
+    const userId = req.userId;
+    
     try {
         // query user based on name
-        const existCategories = await categories.findOne({
+        const category = (await categories.findAll({
             where: {
-                name: name,
+                id: req.params.id,
+                userId: userId,
             },
-        });
+        }))[0];
         
         // No name return
         //   if name not found return 404
-        if (!existCategories) {
+        if (!category) {
             res.status(404).json({ message: "categories not found" });
             return;
+            
         }
-        else {            
-            res.status(200).json({ message: "categories found", data: {id: existCategories.id} });
-            return;           
+
+        else { 
+
+            res.status(200).json({ message: "categories found", data: { id: category.id }});
+            return;
+            
         }  
         
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error });
     }
-}
+};
 
 const listing = async (req, res) => {
+    const userId = req.userId;
     try {
 
-        const alldata =await categories.findAll({raw:true});
+        const category = (await categories.findAll({ include: userId }))[0];
 
-        res.status(200).json({ message: "List of categories", data: {alldata} });
+        res.status(200).json({ message: "categories found", data: (category, null, 2)});
+            return;
 
         
     } catch (error) {

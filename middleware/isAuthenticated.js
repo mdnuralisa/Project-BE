@@ -7,7 +7,7 @@ const isAuthenticated = (req, res, next) => {
     // early guard clause, everything error or negative
     if (!decoded?.id) return res.status(401).json({ message: "Unauthorised" });
     // IMPORTANT!!!!!
-    req.user = decoded.id;
+    req.userId = decoded.id;
     next();
   } catch (error) {
     res.status(401).json({ message: "Unauthorised", error });

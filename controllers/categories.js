@@ -6,10 +6,11 @@ const store = async (req, res) => {
     try {
         const newCategories = await categories.create({
             name: name,
+            userId: req.userId
         });
         res.status(200).json({
             message: "New categories created",
-            data: { name: newCategories.name, id: newCategories.id  },
+            data: { name: newCategories.name, id: newCategories.id, user: req.userId },
         });
         
     } catch (error) {
@@ -19,64 +20,68 @@ const store = async (req, res) => {
 };
 
 const deleteCategories = async (req, res) => {
-    const { name } = req.body;
+    const userId = req.userId;
     
     try {
-        
         // query user based on name
-        const existCategories = await categories.findOne({
+        const category = (await categories.findAll({
             where: {
-                name: name,
+                id: req.params.id,
+                userId: userId,
             },
-        });
+        }))[0];
         
         // No name return
         //   if name not found return 404
-        if (!existCategories) {
+        if (!category) {
             res.status(404).json({ message: "categories not found" });
             return;
+            
         }
-        
-        else // Delete 
-        {await existCategories.destroy({
-            where: {
-                id: categories.id
-            },
-        });};
-        
-        res.status(200).json({ message: "categories deleted" });
-        return;
+
+        else { 
+            await category.destroy({
+                where: {
+                    id: categories.id
+                },
+            });
+
+            res.status(200).json({ message: "categories deleted" });
+            return;
+            
+        }  
         
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error });
     }
-}
+};
 
 const update = async (req, res) => {
-    const { name, newName } = req.body;
+    const {name} = req.body;
+    const userId = req.userId;
+    
     try {
         // query user based on name
-        const existCategories = await categories.findOne({
+        const category = (await categories.findAll({
             where: {
-                name: name,
+                id: req.params.id,
+                userId: userId,
             },
-        });
+        }))[0];
         
         // No name return
         //   if name not found return 404
-        if (!existCategories) {
+        if (!category) {
             res.status(404).json({ message: "categories not found" });
             return;
+            
         }
+
         else { 
             // Change everyone without a last name to "Doe"
-            await categories.update({ name: newName }, {
-                where: {
-                    id: existCategories.id,
-                },
-            });
+            await category.update({ name: name });
             
-            res.status(200).json({ message: "new name for categories updated", data: { name: newName, id: existCategories.id }});
+            res.status(200).json({ message: "new name for categories updated", data: { name: name, id: category.id }});
             return;
             
         }  

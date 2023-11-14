@@ -20,5 +20,6 @@ apiRoutes.post("/store", categoriesController.store);
 apiRoutes.delete("/delete", categoriesController.deleteCategories);
 apiRoutes.put("/update", categoriesController.update);
 apiRoutes.get("/show", categoriesController.show);
+apiRoutes.get("/listing", categoriesController.listing);
 
 export default apiRoutes;

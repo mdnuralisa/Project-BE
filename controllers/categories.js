@@ -9,7 +9,7 @@ const store = async (req, res) => {
         });
         res.status(200).json({
             message: "New categories created",
-            data: { name: newCategories.name },
+            data: { name: newCategories.name, id: newCategories.id  },
         });
         
     } catch (error) {
@@ -76,7 +76,7 @@ const update = async (req, res) => {
                 },
             });
             
-            res.status(200).json({ message: "new name for categories updated" });
+            res.status(200).json({ message: "new name for categories updated", data: { name: newName, id: existCategories.id }});
             return;
             
         }  
@@ -111,6 +111,20 @@ const show = async (req, res) => {
         res.status(500).json({ message: "Server error", error: error });
     }
 }
-const categoriesController = { store, deleteCategories, update, show };
+
+const listing = async (req, res) => {
+    try {
+
+        const alldata =await categories.findAll({raw:true});
+
+        res.status(200).json({ message: "List of categories", data: {alldata} });
+
+        
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error });
+    }
+}
+
+const categoriesController = { store, deleteCategories, update, show, listing };
 
 export default categoriesController;

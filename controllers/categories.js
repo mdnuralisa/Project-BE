@@ -46,7 +46,7 @@ const deleteCategories = async (req, res) => {
                 },
             });
 
-            res.status(200).json({ message: "categories deleted" });
+            res.status(200).json({ message: "categories deleted", data: { name: category.name, id: category.id } });
             return;
             
         }  
@@ -113,7 +113,7 @@ const show = async (req, res) => {
 
         else { 
 
-            res.status(200).json({ message: "categories found", data: { id: category.id }});
+            res.status(200).json({ message: "categories found", data: { name: category.name, id: category.id }});
             return;
             
         }  

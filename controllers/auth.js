@@ -1,4 +1,5 @@
 import user from "../model/user.model.js";
+import categories from "../model/categories.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -12,6 +13,14 @@ const register = async (req, res) => {
         email: email,
         password: hashedValue,
       });
+
+      await categories.bulkCreate([
+        {name: 'Kitchen', userId: newUser.id},
+        {name: 'Laundry', userId: newUser.id},
+        {name: 'Toiletries', userId: newUser.id},
+        {name: 'Kids', userId: newUser.id}
+      ])
+
       res.status(200).json({
         message: "New user created",
         data: { email: newUser.email },

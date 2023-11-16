@@ -29,5 +29,4 @@ apiRoutes.get("/categories/listing", isAuthenticated, categoriesController.listi
 //api for items
 apiRoutes.post("/items/store", isAuthenticated, itemsController.store);
 
-
 export default apiRoutes;

@@ -131,6 +131,9 @@ const listing = async (req, res) => {
             where: {
                 userId: userId,
             },
+            order: [
+                ['name', 'ASC'],
+            ],
             attributes: ['id', 'name'],
         }));
 

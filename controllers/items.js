@@ -1,23 +1,32 @@
+import categories from "../model/categories.model.js";
 import items from "../model/items.model.js";
 
-// const store = async (req, res) => {
-//     const { name }  = req.body;
-    
-//     try {
-//         const newCategories = await categories.create({
-//             name: name,
-//             userId: req.userId
-//         });
-//         res.status(200).json({
-//             message: "New categories created",
-//             data: { name: newCategories.name, id: newCategories.id, user: req.userId },
-//         });
+const store = async (req, res) => {
+    const { name }  = req.body;
+    const userId = req.userId;
+
+    const category = await categories.findOne ({
+        where: {
+            userId: userId,
+            attributes: ['id'],
+        },
+    });
+
+    try {
+        const item = await items.create({
+            name: name,
+            categoryId: category.id,
+        });
+        res.status(200).json({
+            message: "New items created",
+            data: { name: item.name, id: item.id, categoryId: category.id },
+        });
         
-//     } catch (error) {
-//         res.status(500).json({ message: "Server error", error: error });
-//     }
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error });
+    }
     
-// };
+};
 
 // const deleteCategories = async (req, res) => {
 //     const userId = req.userId;
@@ -146,6 +155,6 @@ import items from "../model/items.model.js";
 //     }
 // }
 
-// const categoriesController = { store, deleteCategories, update, show, listing };
+const itemsController = { store };
 
-// export default categoriesController;
+export default itemsController;

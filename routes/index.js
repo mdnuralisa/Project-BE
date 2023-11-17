@@ -4,6 +4,7 @@ import authController from "../controllers/auth.js";
 import isAuthenticated from "../middleware/isAuthenticated.js";
 import categoriesController from "../controllers/categories.js";
 import itemsController from "../controllers/items.js";
+import isCategoryOwner from "../middleware/isCategoryOwner.js";
 
 
 const apiRoutes = Router();
@@ -27,6 +28,6 @@ apiRoutes.get("/categories/show/:id", isAuthenticated, categoriesController.show
 apiRoutes.get("/categories/listing", isAuthenticated, categoriesController.listing);
 
 //api for items
-apiRoutes.post("/items/store", isAuthenticated, itemsController.store);
+apiRoutes.post("/categories/:category_id/items/store", isAuthenticated, isCategoryOwner, itemsController.store);
 
 export default apiRoutes;

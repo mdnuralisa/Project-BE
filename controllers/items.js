@@ -1,28 +1,22 @@
-import categories from "../model/categories.model.js";
+
 import items from "../model/items.model.js";
 
 const store = async (req, res) => {
     const { name }  = req.body;
-    const userId = req.userId;
-
-    const category = await categories.findOne ({
-        where: {
-            userId: userId,
-            attributes: ['id'],
-        },
-    });
+    const category_id = req.category_id;
 
     try {
         const item = await items.create({
             name: name,
-            categoryId: category.id,
+            categoryId: category_id,
         });
         res.status(200).json({
             message: "New items created",
-            data: { name: item.name, id: item.id, categoryId: category.id },
+            data: { name: item.name, id: item.id, categoryId: category_id },
         });
         
     } catch (error) {
+        console.log(error)
         res.status(500).json({ message: "Server error", error: error });
     }
     

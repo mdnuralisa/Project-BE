@@ -126,29 +126,29 @@ const showItem = async (req, res) => {
     }
 };
 
-// const listing = async (req, res) => {
-//     const userId = req.userId;
-//     try {
+const listingItem = async (req, res) => {
+    const category_id = req.category_id;
+    try {
 
-//         const data = (await categories.findAll({ 
-//             where: {
-//                 userId: userId,
-//             },
-//             order: [
-//                 ['name', 'ASC'],
-//             ],
-//             attributes: ['id', 'name'],
-//         }));
+        const data = (await items.findAll({ 
+            where: {
+                category_id: category_id,
+            },
+            order: [
+                ['name', 'ASC'],
+            ],
+            attributes: ['id', 'name'],
+        }));
 
-//         res.status(200).json({ message: "categories found", data: data});
+        res.status(200).json({ message: "items found", data: data});
 
-//         return;
-//     } catch (error) {
-//         console.log(error);
-//         res.status(500).json({ message: "Server error", error: error });
-//     }
-// }
+        return;
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Server error", error: error });
+    }
+}
 
-const itemsController = { storeItem, deleteItem, updateItem, showItem };
+const itemsController = { storeItem, deleteItem, updateItem, showItem, listingItem };
 
 export default itemsController;

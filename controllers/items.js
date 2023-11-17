@@ -22,42 +22,42 @@ const store = async (req, res) => {
     
 };
 
-// const deleteCategories = async (req, res) => {
-//     const userId = req.userId;
+const deleteItem = async (req, res) => {
+    const category_id = req.category_id;
     
-//     try {
-//         // query user based on name
-//         const category = (await categories.findAll({
-//             where: {
-//                 id: req.params.id,
-//                 userId: userId,
-//             },
-//         }))[0];
+    try {
+        // query user based on name
+        const item = (await items.findAll({
+            where: {
+                id: req.params.id,
+                categoryId: category_id,
+            },
+        }))[0];
         
-//         // No name return
-//         //   if name not found return 404
-//         if (!category) {
-//             res.status(404).json({ message: "categories not found" });
-//             return;
+        // No name return
+        //   if name not found return 404
+        if (!item) {
+            res.status(404).json({ message: "item not found" });
+            return;
             
-//         }
+        }
 
-//         else { 
-//             await category.destroy({
-//                 where: {
-//                     id: categories.id
-//                 },
-//             });
+        else { 
+            await item.destroy({
+                where: {
+                    id: item.id
+                },
+            });
 
-//             res.status(200).json({ message: "categories deleted", data: { name: category.name, id: category.id } });
-//             return;
+            res.status(200).json({ message: "item deleted", data: { name: item.name, id: item.id } });
+            return;
             
-//         }  
+        }  
         
-//     } catch (error) {
-//         res.status(500).json({ message: "Server error", error: error });
-//     }
-// };
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error });
+    }
+};
 
 // const update = async (req, res) => {
 //     const {name} = req.body;
@@ -149,6 +149,6 @@ const store = async (req, res) => {
 //     }
 // }
 
-const itemsController = { store };
+const itemsController = { store, deleteItem };
 
 export default itemsController;

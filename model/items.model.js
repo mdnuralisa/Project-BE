@@ -14,6 +14,18 @@ const items = postgresConnection.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+
+    unit: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "",
+    },
   },
   {
     timestamps: true,

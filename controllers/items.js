@@ -59,40 +59,40 @@ const deleteItem = async (req, res) => {
     }
 };
 
-// const update = async (req, res) => {
-//     const {name} = req.body;
-//     const userId = req.userId;
+const updateItem = async (req, res) => {
+    const {name} = req.body;
+    const category_id = req.category_id;
     
-//     try {
-//         // query user based on name
-//         const category = (await categories.findAll({
-//             where: {
-//                 id: req.params.id,
-//                 userId: userId,
-//             },
-//         }))[0];
+    try {
+        // query user based on name
+        const item = (await items.findAll({
+            where: {
+                id: req.params.id,
+                categoryId: category_id,
+            },
+        }))[0];
         
-//         // No name return
-//         //   if name not found return 404
-//         if (!category) {
-//             res.status(404).json({ message: "categories not found" });
-//             return;
+        // No name return
+        //   if name not found return 404
+        if (!item) {
+            res.status(404).json({ message: "categories not found" });
+            return;
             
-//         }
+        }
 
-//         else { 
-//             // Change everyone without a last name to "Doe"
-//             await category.update({ name: name });
+        else { 
+            // Change everyone without a last name to "Doe"
+            await item.update({ name: name });
             
-//             res.status(200).json({ message: "new name for categories updated", data: { name: name, id: category.id }});
-//             return;
+            res.status(200).json({ message: "new name for categories updated", data: { name: name, id: item.id }});
+            return;
             
-//         }  
+        }  
         
-//     } catch (error) {
-//         res.status(500).json({ message: "Server error", error: error });
-//     }
-// }
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error });
+    }
+}
 
 // const show = async (req, res) => {
 //     const userId = req.userId;
@@ -149,6 +149,6 @@ const deleteItem = async (req, res) => {
 //     }
 // }
 
-const itemsController = { store, deleteItem };
+const itemsController = { store, deleteItem, updateItem };
 
 export default itemsController;

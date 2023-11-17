@@ -30,6 +30,6 @@ apiRoutes.get("/categories/listing", isAuthenticated, categoriesController.listi
 //api for items
 apiRoutes.post("/categories/:category_id/items/store", isAuthenticated, isCategoryOwner, itemsController.store);
 apiRoutes.delete("/categories/:category_id/items/delete/:id", isAuthenticated, isCategoryOwner, itemsController.deleteItem);
-
+apiRoutes.put("/categories/:category_id/items/update/:id", isAuthenticated, isCategoryOwner, itemsController.updateItem);
 
 export default apiRoutes;

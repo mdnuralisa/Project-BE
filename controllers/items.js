@@ -1,7 +1,7 @@
 
 import items from "../model/items.model.js";
 
-const store = async (req, res) => {
+const storeItem = async (req, res) => {
     const { name }  = req.body;
     const category_id = req.category_id;
 
@@ -75,7 +75,7 @@ const updateItem = async (req, res) => {
         // No name return
         //   if name not found return 404
         if (!item) {
-            res.status(404).json({ message: "categories not found" });
+            res.status(404).json({ message: "item not found" });
             return;
             
         }
@@ -94,37 +94,37 @@ const updateItem = async (req, res) => {
     }
 }
 
-// const show = async (req, res) => {
-//     const userId = req.userId;
+const showItem = async (req, res) => {
+    const category_id = req.category_id;
     
-//     try {
-//         // query user based on name
-//         const category = (await categories.findAll({
-//             where: {
-//                 id: req.params.id,
-//                 userId: userId,
-//             },
-//         }))[0];
+    try {
+        // query user based on name
+        const item = (await items.findAll({
+            where: {
+                id: req.params.id,
+                category_id: category_id,
+            },
+        }))[0];
         
-//         // No name return
-//         //   if name not found return 404
-//         if (!category) {
-//             res.status(404).json({ message: "categories not found" });
-//             return;
+        // No name return
+        //   if name not found return 404
+        if (!item) {
+            res.status(404).json({ message: "item not found" });
+            return;
             
-//         }
+        }
 
-//         else { 
+        else { 
 
-//             res.status(200).json({ message: "categories found", data: { name: category.name, id: category.id }});
-//             return;
+            res.status(200).json({ message: "item found", data: { name: item.name, id: item.id }});
+            return;
             
-//         }  
+        }  
         
-//     } catch (error) {
-//         res.status(500).json({ message: "Server error", error: error });
-//     }
-// };
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error });
+    }
+};
 
 // const listing = async (req, res) => {
 //     const userId = req.userId;
@@ -149,6 +149,6 @@ const updateItem = async (req, res) => {
 //     }
 // }
 
-const itemsController = { store, deleteItem, updateItem };
+const itemsController = { storeItem, deleteItem, updateItem, showItem };
 
 export default itemsController;

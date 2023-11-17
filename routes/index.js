@@ -28,8 +28,9 @@ apiRoutes.get("/categories/show/:id", isAuthenticated, categoriesController.show
 apiRoutes.get("/categories/listing", isAuthenticated, categoriesController.listing);
 
 //api for items
-apiRoutes.post("/categories/:category_id/items/store", isAuthenticated, isCategoryOwner, itemsController.store);
+apiRoutes.post("/categories/:category_id/items/store", isAuthenticated, isCategoryOwner, itemsController.storeItem);
 apiRoutes.delete("/categories/:category_id/items/delete/:id", isAuthenticated, isCategoryOwner, itemsController.deleteItem);
 apiRoutes.put("/categories/:category_id/items/update/:id", isAuthenticated, isCategoryOwner, itemsController.updateItem);
+apiRoutes.get("/categories/:category_id/items/show/:id", isAuthenticated, isCategoryOwner, itemsController.showItem);
 
 export default apiRoutes;

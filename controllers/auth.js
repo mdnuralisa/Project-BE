@@ -69,6 +69,79 @@ const login = async (req, res) =>{
     }
 }
 
+const showUser = async (req, res) => {
+  const userId = req.userId;
+  
+  try {
+      // query user based on name
+      const User = await user.findOne({
+          where: {
+              id: userId,
+          },
+      });
+      
+      // No name return
+      //   if name not found return 404
+      if (!User) {
+          res.status(404).json({ message: "user not found" });
+          return;
+          
+      }
+
+      else { 
+
+          res.status(200).json({ message: "user found", data: { email: User.email}});
+          return;
+          
+      }  
+      
+  } catch (error) {
+      res.status(500).json({ message: "Server error", error: error });
+
+      console.log(">>>>");
+      console.log(error);
+  }
+};
+
+const updatePassword = async (req, res) => {
+  const { newPassword } = req.body;
+  const userId = req.userId;
+  
+  try {
+
+    const salt = bcrypt.genSaltSync(10);
+    const hashedValue = bcrypt.hashSync(newPassword, salt);
+      // query user based on name
+      const User = await user.findOne({
+          where: {
+              id: userId,
+          },
+      });
+      
+      // No name return
+      //   if name not found return 404
+      if (!User) {
+          res.status(404).json({ message: "User not found" });
+          return;
+          
+      }
+
+      else { 
+          // Change everyone without a last name to "Doe"
+          await User.update({ password: hashedValue });
+          
+          res.status(200).json({ message: "password updated"});
+          return;
+          
+      }  
+      
+  } catch (error) {
+      res.status(500).json({ message: "Server error", error: error });
+      console.log(error);
+  }
+}
+
+
 const publicController = (req,res)=>{
     res.status(200).json({ message: "Public route"});
 }
@@ -77,6 +150,6 @@ const protectedController = (req,res)=>{
     res.status(200).json({ message: "Protected route", data: { user: req.user}});
 }
 
-const authController = { register, login, publicController, protectedController };
+const authController = { register, login, publicController, protectedController, showUser, updatePassword};
 
 export default authController;

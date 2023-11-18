@@ -15,6 +15,8 @@ apiRoutes.post("/", publicController.post);
 //api for auth
 apiRoutes.post("/register", authController.register);
 apiRoutes.post("/login", authController.login);
+apiRoutes.get("/show", isAuthenticated, authController.showUser);
+apiRoutes.put("/update", isAuthenticated, authController.updatePassword);
 
 apiRoutes.get("/public", authController.publicController);
 apiRoutes.get("/protected", isAuthenticated, authController.protectedController);

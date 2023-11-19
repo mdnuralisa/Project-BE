@@ -2,6 +2,7 @@ import user from "../model/user.model.js";
 import categories from "../model/categories.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import "dotenv/config";
 
 const register = async (req, res) => {
     const { email, password } = req.body;
@@ -52,7 +53,7 @@ const login = async (req, res) =>{
         const isMatch = await bcrypt.compare(password, User.password);
         
         // create access token
-        const token = jwt.sign({id: User.id}, "secret-key-here");
+        const token = jwt.sign({id: User.id}, process.env.JWT);
 
             // compare password from body with database
         if (isMatch){

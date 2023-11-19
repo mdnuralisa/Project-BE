@@ -86,7 +86,7 @@ const updateItem = async (req, res) => {
             // Change everyone without a last name to "Doe"
             await item.update({ name: name, quantity: quantity, unit: unit  });
             
-            res.status(200).json({ message: "item updated", data: { name: name, quantity: quantity, unit: unit, id: item.id }});
+            res.status(200).json({ message: "item updated", data: { name: name, quantity: quantity, unit: unit, id: item.id}});
             return;
             
         }  
@@ -139,7 +139,7 @@ const listingItem = async (req, res) => {
             order: [
                 ['name', 'ASC'],
             ],
-            attributes: ['id', 'name' , 'quantity', 'unit'],
+            attributes: ['id', 'name' , 'quantity', 'unit', 'categoryId'],
         }));
 
         res.status(200).json({ message: "items found", data: data});

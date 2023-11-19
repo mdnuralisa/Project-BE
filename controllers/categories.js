@@ -1,4 +1,5 @@
 import categories from "../model/categories.model.js";
+import items from "../model/items.model.js";
 
 const store = async (req, res) => {
     const { name }  = req.body;
@@ -135,6 +136,7 @@ const listing = async (req, res) => {
                 ['name', 'ASC'],
             ],
             attributes: ['id', 'name'],
+            include: items
         }));
 
         res.status(200).json({ message: "categories found", data: data});

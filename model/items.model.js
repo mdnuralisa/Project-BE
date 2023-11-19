@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import { postgresConnection } from "../database/connection.js";
+import categories from "./categories.model.js";
 
 const items = postgresConnection.define(
   "items",
@@ -32,5 +33,7 @@ const items = postgresConnection.define(
     underscored: true,
   }
 );
+
+// items.belongsTo(categories)
 
 export default items;
